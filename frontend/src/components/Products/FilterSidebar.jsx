@@ -1,6 +1,6 @@
-import React from 'react'
+import {useState,useEffect} from 'react'
 import { useSearchParams } from 'react-router';
-
+ 
 const FilterSidebar = () => {
     const [searchParams,setSearchParams] = useSearchParams();
     const [filters,setFilter] = useState({
@@ -43,7 +43,7 @@ const FilterSidebar = () => {
          "Viscose",
          "Fleece",
      ];
-     constbrands =[
+     const brands =[
         "Urban Threads",
         "Modern Fit",
         "Street Style",
@@ -54,7 +54,7 @@ const FilterSidebar = () => {
      const genders = ['Men',"Women"];
 
      useEffect(()=>{
-         const params = Objects.FromEntries([...searchParams]);
+         const params = Object.fromEntries([...searchParams]);
 
          setFilter({
              category: params.category || "",
@@ -71,8 +71,22 @@ const FilterSidebar = () => {
 
      const handleFilterChange = (e)=>{
            const {name,value,checked,type} = e.target;
-           console.log({name,value,checked,type});
-     }
+          let newFilters = {...filters};
+               
+          if(type === "checkbox"){
+              if(checked){
+                newFilters[name] = [...FilterSidebar(newFilters[name] || []),value];
+              } else{
+                newFilters[name] = newFilters[name].filter((item)=> item !== value );
+              }
+          }
+          else{
+             newFilters[name] = value;
+          }
+          setFilter(newFilters);
+     };
+
+       
      
   return (
         
@@ -104,7 +118,7 @@ const FilterSidebar = () => {
                <label className='block text-gray-600 font-medium mb-2'>Color</label>
                <div className='flex flex-wrap gap-2'>
                  {color.map((color)=>(
-                  <button key={color} name="color" value={color} onChange={handleFilterChange} className='w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105' style={{backgroundColor: color.toLowerCase()}}></button>
+                  <button key={color} name="color" value={color} onClick={handleFilterChange} className='w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105' style={{backgroundColor: color.toLowerCase()}}></button>
                ))}
                </div>
            </div>
@@ -134,7 +148,7 @@ const FilterSidebar = () => {
             {/* brand filter */}
              <div className='mb-6'>
               <label className='block text-gray-600 font-medium mb-2'>Brand</label>
-                {brand.map((brand)=>(
+                {brands.map((brand)=>(
                     <div key={brand} className='flex items-center mb-1'>
                        <input type="checkbox" name="brand" value={brand} onChange={handleFilterChange} className='mr-2 h-4 w-4 text-blue-400 border-gray-300' />
                         <span className='text-blue-700'>{brand}</span>
@@ -154,6 +168,5 @@ const FilterSidebar = () => {
             </div>
     </div>
   )
-}
-
+}   
 export default FilterSidebar;
