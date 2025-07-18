@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import PaypalButton from "./PaypalButton";
-
+import OrderConfirmationPage from "../../pages/OrderConfirmationPage";
 const cart = {
   products: [
     {
@@ -199,7 +199,7 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
                   <p>Total</p>
-                  <p>${cart.totalPrice?.toLocalesString()}</p>
+                  <p>${cart.totalPrice?.toLocaleString()}</p>
               </div>
           </div>
     </div>
